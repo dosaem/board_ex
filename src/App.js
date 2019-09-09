@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import styled, { css } from 'styled-components';
-import { createStore } from 'redux'
-import reducers from './reducers';
 // 액션 타입
 
 const CONTENTVIEW = 'CONTENTVIEW';
@@ -24,18 +22,6 @@ const initialState = {
   pageNum: 1
 }
 
-function reducer(state = initialState, action) {
-  switch (action.type) {
-    case CONTENTVIEW:
-      return {
-
-      }
-    case SELECTPAGE:
-      return {
-
-      }
-  }
-}
 
 const DivCommon = styled.div`
   display: inline-block;
@@ -80,6 +66,19 @@ const PageUl = styled.ul`
   display: inline-block;
   list-style-type: none;
 `
+function fetchBoards(pageNun) {
+  // axios.get("http://13.124.138.86:8080/post/list/1")
+  axios.get("http://localhost:8080/post/list/" + pageNun)
+  .then(res => {
+    const boards = res.data.posts.rows;
+    boards.map((boards, index) => (
+      boards.key = index,
+      boards.show = false
+    ));
+
+    this.setState({ boards });
+  })
+}
 
 class App extends Component {
   state = {
@@ -87,69 +86,29 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // axios.get("http://13.124.138.86:8080/post/list/1")
-    axios.get("http://localhost:8080/post/list/1")
-    .then(res => {
-      const boards = res.data.posts.rows;
-      boards.map((boards, index) => (
-        boards.key = index,
-        boards.show = false
-      ));
-
-      console.log(boards);
-      this.setState({ boards });
-    })
+    fetchBoards.call(this,1);
   }
 
+  handlePageClick = (e) => {
+    const pageNum = e.currentTarget.dataset.id;
+    fetchBoards.call(this, pageNum);
+  }
 
+   handleClick = (e) => {
+      const { boards } = this.state;
+      const clickIndex = e.currentTarget.dataset.div_id;
+      const show = !boards[clickIndex].show;
+
+      this.setState({
+        boards: boards.map((boards, index) =>
+          index == clickIndex ? { ...boards, show } : boards
+        )
+      });
+    }
 
   render() {    
     const { boards } = this.state;
     console.log(boards)
-
-    const handleClick = (e) => {
-      const clickIndex = e.currentTarget.dataset.div_id;
-      console.log(clickIndex)
-
-      if(boards[clickIndex].show == true) {
-        this.setState({
-          boards: boards.map(
-            (boards, index) => index == clickIndex
-            ? {...boards, show: false}
-            : boards
-          )
-        })
-      }
-      else {
-        this.setState({
-          boards: boards.map(
-            (boards, index) => index == clickIndex
-            ? {...boards, show: true}
-            : boards
-          )
-        })
-      }
-      console.log(boards)
-      }
-
-      const handlePageClick = (e) => {
-        console.log("pageClick", e.currentTarget.dataset.id)
-        const pageNum = e.currentTarget.dataset.id;
-      
-        axios.get(`http://localhost:8080/post/list/`+pageNum)
-        .then(res => {
-          const boards = res.data.posts.rows;
-            boards.map((boards, index) => (
-              boards.key = index,
-              boards.show = false
-            ));
-      
-            console.log(boards);
-            this.setState({ boards });
-
-        })
-      }
-
       return (
         <div>
           <div>
@@ -170,16 +129,16 @@ class App extends Component {
                 content={boards.content}
                 userId={boards.userId}
                 createdAt={boards.createdAt}
-                handleClick={handleClick} >
+                handleClick={this.handleClick} >
               </BoardList>
             )
            )}
          </div>
          <div>
            <PageUl>
-             <li onClick={handlePageClick} data-id="1">1</li>
-             <li onClick={handlePageClick} data-id="2">2</li>
-             <li onClick={handlePageClick} data-id="3">3</li>
+             <li onClick={this.handlePageClick} data-id="1">1</li>
+             <li onClick={this.handlePageClick} data-id="2">2</li>
+             <li onClick={this.handlePageClick} data-id="3">3</li>
             </PageUl>
           </div>
         </div>
