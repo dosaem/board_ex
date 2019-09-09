@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import App, { boardReducer } from './App';
-
+import App from './components/App';
+import boardReducer from './reducers/index'
 
 const store = createStore(boardReducer);
 
