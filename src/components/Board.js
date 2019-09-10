@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components';
 import _ from 'lodash';
 import BoardList from './BoardList'
 import fetchBoards from '../utils/FetchBoards'
-import lifecycle from 'react-pure-lifecycle';
 
 
 const DivCommon = styled.div`
@@ -51,88 +50,20 @@ display: inline-block;
 list-style-type: none;
 `
 
-
-
-
-// handlePageClick = (e) => {
-// const pageNum = e.currentTarget.dataset.id;
-// fetchBoards.call(this, pageNum);
-// }
-
-// handleClick = (e) => {
-//     const { boards } = this.state;
-//     const clickIndex = e.currentTarget.dataset.div_id;
-//     const show = !boards[clickIndex].show;
-
-//     this.setState({
-//     boards: boards.map((boards, index) =>
-//         index == clickIndex ? { ...boards, show } : boards
-//     )
-//     });
-// }
-
-
-
-
-
-
-// const Board = ({ boards, onContentView, total }) => {    
-//     const pages = _.range(Math.ceil(total / 10));
-    
-
-//     componentDidMount(){
-//         fetchBoards.call(this, 1, onContentView);
-//     }
-    
-//     console.log(pages);
-    
-//     const boardList = boards && boards.map(boards => (
-//             <BoardList 
-//             key={boards.key}
-//             index={boards.key}
-//             show={boards.show}
-//             id={boards.id}
-//             title={boards.title}
-//             content={boards.content}
-//             userId={boards.userId}
-//             createdAt={boards.createdAt}
-//             >
-//             </BoardList>
-//         ))
-//     return(
-//     <div>
-//         <div>{boardList}</div>
-//         <PageUl>
-//             {
-//             pages && pages.map(
-//                 page => (<li onClick={() => fetchBoards(page + 1, onContentView)} data-id={page + 1} >{`${page + 1}`}</li>)
-//             )
-//             }
-//         </PageUl>
-//     </div>
-//     );
-// };
-
-
-
-
 class Board extends Component {
     render() {
     
     const {  boards, onContentView, total  } = this.props;
     const pages = _.range(Math.ceil(total / 10));
 
-    // componentDidMount() {
-    //     fetchBoards.call(this, 1, onContentView);
-    // }
+    boards.length == 0 && fetchBoards.call(this, 1, onContentView);
+
 
     console.log(pages);
     
     const boardList = boards && boards.map(boards => (
             <BoardList 
-            key={boards.key}
-            index={boards.key}
-            show={boards.show}
+            key={boards.id}
             id={boards.id}
             title={boards.title}
             content={boards.content}
@@ -154,7 +85,6 @@ class Board extends Component {
     </div>
     );
 };}
-
 
 
 Board.propTypes = {
