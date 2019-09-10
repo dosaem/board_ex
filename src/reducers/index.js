@@ -6,7 +6,7 @@ const initialState = {
 }
 
 function boardReducer(state = initialState, action) {
-    console.log(state)
+    console.log(state);
     switch(action.type) {
         case types.CONTENTVIEW:
         return {

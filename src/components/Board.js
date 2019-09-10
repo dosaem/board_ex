@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import BoardList from './BoardList';
-import axios from 'axios';
 import styled, { css } from 'styled-components';
 import _ from 'lodash';
+import BoardList from './BoardList'
+import fetchBoards from '../utils/FetchBoards'
+import lifecycle from 'react-pure-lifecycle';
 
 
 const DivCommon = styled.div`
@@ -50,26 +51,8 @@ display: inline-block;
 list-style-type: none;
 `
 
-function fetchBoards(pageNun, callback) {
-    console.log(callback);
-    // axios.get("http://13.124.138.86:8080/post/list/1")
-    axios.get("http://localhost:8080/post/list/" + pageNun)
-    .then(res => {
-    const { rows: boards, count: total } = res.data.posts;
-    boards.map((boards, index) => (
-        boards.key = index,
-        boards.show = false
-    ));
 
-    callback(boards, total);
-    })
-}
 
-// componentDidMount() {
-// const { onContentView } = this.props; 
-// console.log(this.props);
-// fetchBoards.call(this, 1, onContentView);
-// }
 
 // handlePageClick = (e) => {
 // const pageNum = e.currentTarget.dataset.id;
@@ -88,21 +71,64 @@ function fetchBoards(pageNun, callback) {
 //     });
 // }
 
-function Board({ boards, onContentView, total })  {
 
+
+
+
+
+// const Board = ({ boards, onContentView, total }) => {    
+//     const pages = _.range(Math.ceil(total / 10));
+    
+
+//     componentDidMount(){
+//         fetchBoards.call(this, 1, onContentView);
+//     }
+    
+//     console.log(pages);
+    
+//     const boardList = boards && boards.map(boards => (
+//             <BoardList 
+//             key={boards.key}
+//             index={boards.key}
+//             show={boards.show}
+//             id={boards.id}
+//             title={boards.title}
+//             content={boards.content}
+//             userId={boards.userId}
+//             createdAt={boards.createdAt}
+//             >
+//             </BoardList>
+//         ))
+//     return(
+//     <div>
+//         <div>{boardList}</div>
+//         <PageUl>
+//             {
+//             pages && pages.map(
+//                 page => (<li onClick={() => fetchBoards(page + 1, onContentView)} data-id={page + 1} >{`${page + 1}`}</li>)
+//             )
+//             }
+//         </PageUl>
+//     </div>
+//     );
+// };
+
+
+
+
+class Board extends Component {
+    render() {
+    
+    const {  boards, onContentView, total  } = this.props;
     const pages = _.range(Math.ceil(total / 10));
+
+    // componentDidMount() {
+    //     fetchBoards.call(this, 1, onContentView);
+    // }
+
     console.log(pages);
-    return(
-    <div>
-        <div>
-                <NumberCommon>글번호</NumberCommon>
-                <TitleCommon>글제목</TitleCommon>
-                <UserIdCommon>작성자</UserIdCommon>
-                <CreatedAtCommon>작성일</CreatedAtCommon>
-            </div>
-        <div>
-        {
-        boards && boards.map(boards => (
+    
+    const boardList = boards && boards.map(boards => (
             <BoardList 
             key={boards.key}
             index={boards.key}
@@ -114,23 +140,27 @@ function Board({ boards, onContentView, total })  {
             createdAt={boards.createdAt}
             >
             </BoardList>
-        ))}
-        </div>
-        <div>
+        ))
+    return(
+    <div>
+        <div>{boardList}</div>
         <PageUl>
             {
             pages && pages.map(
                 page => (<li onClick={() => fetchBoards(page + 1, onContentView)} data-id={page + 1} >{`${page + 1}`}</li>)
             )
             }
-    </PageUl>
+        </PageUl>
     </div>
-</div>
     );
-};
+};}
+
+
+
 Board.propTypes = {
     boards: PropTypes.array,
-    onContentView: PropTypes.func};
+    onContentView: PropTypes.func
+};
 
 Board.defaulProps = {
     boards: [],
