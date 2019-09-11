@@ -50,13 +50,31 @@ display: inline-block;
 list-style-type: none;
 `
 
+// handleClick = (e) => {
+//     const { boards } = this.state;
+//     const clickIndex = e.currentTarget.dataset.div_id;
+//     const show = !boards[clickIndex].show;
+
+//     this.setState({
+//     boards: boards.map((boards, index) =>
+//         index == clickIndex ? { ...boards, show } : boards
+//     )
+//     });
+// }
+
+
 class Board extends Component {
+
+    componentDidMount() {
+        const {  boards, onContentView, total, openBoard  } = this.props;
+        fetchBoards.call(this, 1, onContentView);
+    };
+
     render() {
     
-    const {  boards, onContentView, total  } = this.props;
+    const {  boards, onContentView, total, openBoard  } = this.props;
     const pages = _.range(Math.ceil(total / 10));
-
-    boards.length == 0 && fetchBoards.call(this, 1, onContentView);
+    
 
 
     console.log(pages);
@@ -64,11 +82,14 @@ class Board extends Component {
     const boardList = boards && boards.map(boards => (
             <BoardList 
             key={boards.id}
+            index={boards.key}
+            show={boards.show}
             id={boards.id}
             title={boards.title}
             content={boards.content}
             userId={boards.userId}
             createdAt={boards.createdAt}
+            openBoard={openBoard}
             >
             </BoardList>
         ))

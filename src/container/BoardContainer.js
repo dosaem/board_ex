@@ -8,6 +8,7 @@ const mapStateToProps = (state) => ({
     boards: state.boards,
     pageNum: state.pageNum,
     total: state.total,
+    clickIndex: state.clickIndex
 })
 
 /* 
@@ -16,9 +17,9 @@ const mapStateToProps = (state) => ({
 */
 
 const mapDispatchToProps = (dispatch) => ({
-    onContentView: (boards, total) => dispatch(actions.contentView(boards, total))
+    onContentView: (boards, total) => dispatch(actions.contentView(boards, total)),
+    openBoard: (boards, clickIndex) => dispatch(actions.openBoard(boards))
 })
-
 
 const BoardContainer = connect(
     mapStateToProps,

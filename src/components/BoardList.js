@@ -1,5 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import PropTypes from 'prop-types';
+
 
 const DivCommon = styled.div`
 display: inline-block;
@@ -41,14 +43,22 @@ width: 70px;
 `
 
 
-function BoardList({ id, title, content, userId, createdAt, handleClick, index, show}) {
+const BoardList = ({ id, title, content, userId, createdAt, openBoard, index, show}) => {
     return <div>
         <NumberCommon>{id}</NumberCommon>
-        <TitleCommon onClick={handleClick} data-div_id={index} >{title}</TitleCommon>
+        <TitleCommon onClick={openBoard} data-div_id={index} >{title}</TitleCommon>
         <ContentCommon inverted={show}>{content}</ContentCommon>
         <UserIdCommon>{userId}</UserIdCommon>
         <CreatedAtCommon>{createdAt}</CreatedAtCommon>
     </div>
+}
+
+BoardList.propTypes = {
+    openBoard: PropTypes.func,
+};
+
+BoardList.defaultProps = {
+    openBoard: () => console.warn('openBoard not defined')
 }
 
 export default BoardList;

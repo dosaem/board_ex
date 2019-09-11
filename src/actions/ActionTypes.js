@@ -6,3 +6,4 @@ Action 의 종류들을 선언합니다.
 
 // 액션 타입
 export const CONTENTVIEW = 'CONTENTVIEW';
+export const OPENBOARD = 'OPENBOARD';

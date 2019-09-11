@@ -6,3 +6,10 @@ export const contentView = (boards, total) => ({
     boards,
     total,
 });
+
+export const openBoard = (boards, clickIndex, checkShow ) => ({
+    type: types.OPENBOARD,
+    boards,
+    clickIndex,
+    checkShow
+});
